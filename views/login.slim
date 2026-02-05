@@ -1,0 +1,14 @@
+.auth-container
+  .auth-form
+    h2 Login
+    form method="post" action="/login"
+      .form-group
+        label Email
+        input.form-control type="email" name="email" required=""
+      .form-group
+        label Password
+        input.form-control type="password" name="password" required=""
+      button.btn.btn-primary type="submit" Login
+    p
+      | Don't have an account? 
+      a href="/register" Register here

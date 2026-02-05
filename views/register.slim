@@ -1,0 +1,20 @@
+.auth-container
+  .auth-form
+    h2 Create Account
+    form method="post" action="/register"
+      .form-group
+        label Username
+        input.form-control type="text" name="username" required=""
+      .form-group
+        label Email
+        input.form-control type="email" name="email" required=""
+      .form-group
+        label Password
+        input.form-control type="password" name="password" required=""
+      .form-group
+        label Confirm Password
+        input.form-control type="password" name="password_confirm" required=""
+      button.btn.btn-primary type="submit" Register
+    p
+      | Already have an account? 
+      a href="/login" Login here
