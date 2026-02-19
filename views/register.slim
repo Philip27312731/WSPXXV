@@ -1,6 +1,8 @@
 .auth-container
   .auth-form
     h2 Create Account
+    - if error
+      .alert.alert-danger= error
     form method="post" action="/register"
       .form-group
         label Username

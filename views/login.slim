@@ -1,6 +1,8 @@
 .auth-container
   .auth-form
     h2 Login
+    - if error
+      .alert.alert-danger= error
     form method="post" action="/login"
       .form-group
         label Email

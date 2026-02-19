@@ -2,15 +2,24 @@
   .sidebar
     .player-info
       h3 Account
-      p.balance Balance: 0.00kr
+      - if error
+        .alert.alert-danger= error
+      - if message
+        .alert.alert-success= message
+      p.balance= "Balance: #{'%.2f' % balance}kr"
       a.btn.btn-small href="/logout" Logout
   
   .main-game
-    h2 Games
     .games-grid
       .game-card
-        h4 Game 1
         p.description Exciting game experience
-        a.btn.btn-play href="#" Play Now
+        form method="post" action="/play"
+          .form-group
+            label Bet amount
+            select name="bet"
+              - bet_options.each do |b|
+                option value=b.to_i selected=(b == bet_options.max) = b.to_i
+          p Odds: #{(win_odds * 100).to_i}%
+          button.btn.btn-play type="submit" Play
       
       
