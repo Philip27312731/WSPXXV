@@ -121,3 +121,51 @@ get '/logout' do
 	session.clear
 	redirect '/'
 end
+
+get '/upgrade' do
+	redirect '/login' unless session[:user_id]
+	user = DB.get_first_row('SELECT * FROM users WHERE id = ?', session[:user_id])
+	balance = user ? user['balance'].to_f : 0.0
+	error = session.delete(:error)
+	notice = session.delete(:message)
+	slim :upgrade, locals: { balance: balance, error: error, notice: notice }
+end
+
+post '/upgrade' do
+	redirect '/login' unless session[:user_id]
+	upgrade_type = params['upgrade_type']
+	amount = (params['amount'] || 1).to_i
+	cost_per = case upgrade_type
+	when 'increase_bet' then 1000
+	when 'better_odds' then 2500
+	else 0
+	end
+	cost = cost_per * amount
+	user = DB.get_first_row('SELECT * FROM users WHERE id = ?', session[:user_id])
+	current = user ? user['balance'].to_f : 0.0
+	if current < cost
+		session[:error] = 'Insufficient funds for upgrade'
+		redirect '/play'
+	end
+	# Deduct cost
+	new_balance = current - cost
+	DB.execute('UPDATE users SET balance = ? WHERE id = ?', [new_balance, session[:user_id]])
+
+	case upgrade_type
+	when 'increase_bet'
+		bet_options = (user['bet_options'] || '100').to_s.split(',').map { |s| s.to_f }
+		new_opt = (bet_options.max || 100) + 100.0 * amount
+		bet_options << new_opt
+		DB.execute('UPDATE users SET bet_options = ? WHERE id = ?', [bet_options.map { |b| (b % 1).zero? ? b.to_i : b }.join(','), session[:user_id]])
+		session[:message] = "Increased bet options. Added #{new_opt}kr"
+	when 'better_odds'
+		current_odds = user['win_odds'] ? user['win_odds'].to_f : 0.5
+		new_odds = [current_odds + 0.01 * amount, 0.95].min
+		DB.execute('UPDATE users SET win_odds = ? WHERE id = ?', [new_odds, session[:user_id]])
+		session[:message] = "Improved win odds to #{'%.2f' % new_odds}"
+	else
+		session[:message] = 'Unknown upgrade selected'
+	end
+
+	redirect '/play'
+end

@@ -1,25 +1,28 @@
 .game-container
   .sidebar
     .player-info
-      h3 Account
-      - if error
-        .alert.alert-danger= error
-      - if message
-        .alert.alert-success= message
-      p.balance= "Balance: #{'%.2f' % balance}kr"
-      a.btn.btn-small href="/logout" Logout
+     center
+        h1 LyckyBet
+        - if error
+          .alert.alert-danger= error
+        - if message
+          .alert.alert-success= message
+        p.balance= "Balance: #{'%.2f' % balance}kr"
+        a.btn.btn-small href="/logout" Logout
+        a.btn.btn-small href="/upgrade" Upgrade
   
   .main-game
     .games-grid
       .game-card
-        p.description Exciting game experience
-        form method="post" action="/play"
-          .form-group
-            label Bet amount
-            select name="bet"
-              - bet_options.each do |b|
-                option value=b.to_i selected=(b == bet_options.max) = b.to_i
-          p Odds: #{(win_odds * 100).to_i}%
-          button.btn.btn-play type="submit" Play
-      
+       center
+          p.description Exciting game experience
+          form method="post" action="/play"
+            .form-group
+              label Bet amount
+              select name="bet"
+                - bet_options.each do |b|
+                  option value=b.to_i selected=(b == bet_options.max) = b.to_i
+            p Odds: #{(win_odds * 100).to_i}%
+            button.btn.btn-play type="submit" Play 
+        
       
