@@ -1,0 +1,7 @@
+h2 Edit Order
+p= "Product: #{product['name']}"
+form method="post" action="/orders/#{order['id']}"
+  label Quantity
+  input type="number" name="quantity" value=order['quantity'] min="1"
+  button type="submit" Update
+a href="/orders" Back

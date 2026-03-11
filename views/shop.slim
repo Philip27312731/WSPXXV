@@ -1,0 +1,34 @@
+h2 Shop
+- if error
+  .alert= error
+- if notice
+  .notice= notice
+table
+  tr
+    th Product
+    th Price
+    th Quantity
+  - products.each do |p|
+    tr
+      td= p['name']
+      td= "#{'%.2f' % p['price']}kr"
+      - max_q = case p['name']; when 'Blood 1 liter' then 10; when 'Kidney' then 1; else nil; end
+      td
+        - if ['Blood 1 liter','Kidney'].include?(p['name'])
+          - rem = 0
+          - if user
+            - rem = user['blood_inventory'] if p['name'] == 'Blood 1 liter'
+            - rem = user['kidney_inventory'] if p['name'] == 'Kidney'
+          - if rem && rem > 0
+            form method="post" action="/shop/sell"
+              input type="hidden" name="product_id" value=p['id']
+              input type="number" name="quantity" value="1" min="1" max=rem style="width:3em"
+              button type="submit" Sell
+            | [#{rem} left]
+          - else
+            | Sold out
+        - else
+          form method="post" action="/shop/buy"
+            input type="hidden" name="product_id" value=p['id']
+            input type="number" name="quantity" value="1" min="1" style="width:3em"#{" max=\"#{max_q}\"" if max_q}
+            button type="submit" Buy

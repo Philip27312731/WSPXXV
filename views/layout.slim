@@ -5,4 +5,12 @@ html
 		meta name="viewport" content="width=device-width, initial-scale=1"
 		title Lucky Bet
 	body
+		nav
+			a href="/" Home
+			- if session[:user_id]
+				a href="/play" Play
+				a href="/shop" Shop
+				a href="/orders" Orders
+				a href="/edit_profile" Edit profile
+				a href="/logout" Logout
 		== yield

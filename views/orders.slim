@@ -1,0 +1,22 @@
+h2 My Orders
+- if error
+  .alert= error
+- if notice
+  .notice= notice
+table
+  tr
+    th Product
+    th Quantity
+    th Price
+    th Total
+    th Actions
+  - orders.each do |ord|
+    tr
+      td= ord['product_name']
+      td= ord['quantity']
+      td= "#{'%.2f' % ord['product_price']}kr"
+      td= "#{'%.2f' % (ord['product_price'].to_f * ord['quantity'].to_i)}kr"
+      td
+        a href="/orders/#{ord['id']}/edit" Edit
+        form method="post" action="/orders/#{ord['id']}/delete" style="display:inline"
+          button type="submit" Cancel

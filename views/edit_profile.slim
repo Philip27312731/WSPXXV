@@ -1,0 +1,26 @@
+- if error
+  .error
+    p = error
+- if message
+  .message
+    p = message
+
+form action="/edit_profile" method="post"
+  h3 Username
+  label
+    | Old username
+    input type="text" name="old_username" value="#{user['username']}" 
+  label
+    | New username
+    input type="text" name="new_username" placeholder="Enter new username"
+  h3 Password
+  label
+    | Old password
+    input type="password" name="old_password" placeholder="Current password"
+  label
+    | New password
+    input type="password" name="new_password" placeholder="New password"
+
+  input type="submit" value="Update profile"
+
+
