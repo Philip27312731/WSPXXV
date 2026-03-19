@@ -1,16 +1,330 @@
 doctype html
 html
-	head
-		meta charset="utf-8"
-		meta name="viewport" content="width=device-width, initial-scale=1"
-		title Lucky Bet
-	body
-		nav
-			a href="/" Home
-			- if session[:user_id]
-				a href="/play" Play
-				a href="/shop" Shop
-				a href="/orders" Orders
-				a href="/edit_profile" Edit profile
-				a href="/logout" Logout
-		== yield
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    title Lucky Bet
+    link rel="preconnect" href="https://fonts.googleapis.com"
+    link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""
+    link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"
+    style
+      |
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+          --green-bright: #39ff14;
+          --green-mid: #22c55e;
+          --green-dark: #0f4a1e;
+          --green-deeper: #071a0c;
+          --black: #030d05;
+          --text-muted: #7dab89;
+          --font-display: 'Bebas Neue', sans-serif;
+          --font-body: 'Rajdhani', sans-serif;
+        }
+
+        body {
+          background-color: var(--black);
+          color: #e8f5e9;
+          font-family: var(--font-body);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        .lb-header {
+          background: linear-gradient(180deg, #000 0%, #030f05 100%);
+          border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .lb-header__inner {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          height: 70px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+
+        .lb-logo {
+          text-decoration: none;
+          display: flex;
+          align-items: baseline;
+          flex-shrink: 0;
+        }
+
+        .lb-logo__lucky {
+          font-family: var(--font-display);
+          font-size: 2rem;
+          color: #fff;
+          letter-spacing: 0.04em;
+          line-height: 1;
+          text-shadow: 0 0 12px rgba(57,255,20,0.4);
+        }
+
+        .lb-logo__bet {
+          font-family: var(--font-display);
+          font-size: 2rem;
+          color: var(--green-bright);
+          letter-spacing: 0.04em;
+          line-height: 1;
+          text-shadow: 0 0 16px var(--green-bright);
+        }
+
+        .lb-nav {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          flex: 1;
+          justify-content: center;
+        }
+
+        .lb-nav a {
+          font-family: var(--font-body);
+          font-weight: 700;
+          font-size: 0.95rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #cce8d0;
+          text-decoration: none;
+          padding: 0.45rem 1rem;
+          border-radius: 4px;
+          transition: color 0.2s, background 0.2s;
+          position: relative;
+        }
+
+        .lb-nav a::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 2px;
+          background: var(--green-bright);
+          transition: width 0.25s;
+          box-shadow: 0 0 8px var(--green-bright);
+          border-radius: 2px;
+        }
+
+        .lb-nav a:hover { color: #fff; }
+        .lb-nav a:hover::after { width: 70%; }
+
+        .lb-header__actions {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-shrink: 0;
+        }
+
+        .lb-btn {
+          font-family: var(--font-body);
+          font-weight: 700;
+          font-size: 0.85rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          text-decoration: none;
+          padding: 0.55rem 1.4rem;
+          border-radius: 5px;
+          transition: all 0.2s;
+          cursor: pointer;
+          border: none;
+          display: inline-block;
+        }
+
+        .lb-btn--outline {
+          border: 1.5px solid rgba(57,255,20,0.5);
+          color: #c8eacc;
+          background: transparent;
+        }
+        .lb-btn--outline:hover {
+          border-color: var(--green-bright);
+          color: var(--green-bright);
+          box-shadow: 0 0 12px rgba(57,255,20,0.25);
+        }
+
+        .lb-btn--primary {
+          background: linear-gradient(135deg, #22c55e, #16a34a);
+          color: #fff;
+          box-shadow: 0 0 16px rgba(34,197,94,0.35);
+        }
+        .lb-btn--primary:hover {
+          background: linear-gradient(135deg, #39ff14, #22c55e);
+          box-shadow: 0 0 22px rgba(57,255,20,0.5);
+          color: #000;
+        }
+
+        /* ── MAIN ── */
+        main { flex: 1; }
+
+        /* ── FOOTER ── */
+        .lb-footer {
+          background: linear-gradient(0deg, #000 0%, #020c04 100%);
+          border-top: 1px solid rgba(57, 255, 20, 0.15);
+          margin-top: auto;
+        }
+
+        .lb-footer__top {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 3rem 2rem 2rem;
+          display: grid;
+          grid-template-columns: 1.6fr 1fr 1fr;
+          gap: 2.5rem;
+        }
+
+        .lb-footer__brand .lb-logo {
+          display: inline-flex;
+          margin-bottom: 1rem;
+        }
+
+        .lb-footer__brand p {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          line-height: 1.6;
+          max-width: 280px;
+        }
+
+        .lb-footer__badges {
+          display: flex;
+          gap: 0.5rem;
+          margin-top: 1.25rem;
+          flex-wrap: wrap;
+        }
+
+        .lb-badge {
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 0.3rem 0.65rem;
+          border-radius: 3px;
+          border: 1px solid rgba(57,255,20,0.25);
+          color: var(--text-muted);
+        }
+
+        .lb-footer__col h4 {
+          font-family: var(--font-display);
+          font-size: 1.1rem;
+          letter-spacing: 0.08em;
+          color: var(--green-bright);
+          text-shadow: 0 0 8px rgba(57,255,20,0.4);
+          margin-bottom: 1rem;
+        }
+
+        .lb-footer__col ul {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 0.55rem;
+        }
+
+        .lb-footer__col ul li a {
+          font-size: 0.88rem;
+          color: var(--text-muted);
+          text-decoration: none;
+          transition: color 0.2s;
+          font-weight: 500;
+        }
+
+        .lb-footer__col ul li a:hover { color: #fff; }
+
+        .lb-footer__bottom {
+          border-top: 1px solid rgba(255,255,255,0.05);
+          padding: 1.25rem 2rem;
+          max-width: 1280px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+
+        .lb-footer__legal {
+          font-size: 0.75rem;
+          color: #3a5e41;
+          line-height: 1.5;
+          max-width: 700px;
+        }
+
+        .lb-footer__18 {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: 2px solid #3a5e41;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 0.75rem;
+          color: #3a5e41;
+          flex-shrink: 0;
+        }
+
+  body
+    header.lb-header
+      .lb-header__inner
+        a.lb-logo href="/"
+          span.lb-logo__lucky Lucky
+          span.lb-logo__bet Bet
+
+        - if session[:user_id]
+          nav.lb-nav
+            a href="/play" Play
+            a href="/shop" Shop
+            a href="/orders" Orders
+            a href="/edit_profile" Edit Profile
+
+        .lb-header__actions
+          - if session[:user_id]
+            a.lb-btn.lb-btn--outline href="/logout" Logout
+          - else
+            a.lb-btn.lb-btn--outline href="/login" Login
+            a.lb-btn.lb-btn--primary href="/register" Sign Up
+
+    main
+      == yield
+
+    footer.lb-footer
+      .lb-footer__top
+        .lb-footer__brand
+          a.lb-logo href="/"
+            span.lb-logo__lucky Lucky
+            span.lb-logo__bet Bet
+          p Your premier destination for casino games, live dealers, and jackpots. Play responsibly and enjoy the thrill.
+          .lb-footer__badges
+            span.lb-badge 🔒 SSL Secured
+            span.lb-badge ✔ Licensed
+            span.lb-badge 🎲 Fair Play
+
+        .lb-footer__col
+          h4 My Account
+          ul
+            - if session[:user_id]
+              li: a href="/play" Play
+              li: a href="/shop" Shop
+              li: a href="/orders" Orders
+              li: a href="/edit_profile" Edit Profile
+              li: a href="/logout" Logout
+            - else
+              li: a href="/login" Login
+              li: a href="/register" Sign Up
+
+        .lb-footer__col
+          h4 Support
+          ul
+            li: a href="/responsible-gaming" Responsible Gaming
+            li: a href="/terms" Terms & Conditions
+            li: a href="/support" 24/7 Support
+
+      .lb-footer__bottom
+        p.lb-footer__legal
+          | LuckyBet is licensed and regulated. Gambling can be addictive — please play responsibly. Must be 18+ to participate.
+        .lb-footer__18 18+
