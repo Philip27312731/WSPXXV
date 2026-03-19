@@ -31,14 +31,38 @@ html
           flex-direction: column;
         }
 
+        .lb-bg-video {
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+          opacity: 0.70;
+        }
+
+        .lb-bg-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        main, .lb-header, .lb-footer {
+          position: relative;
+          z-index: 2;
+        }
+
         /* ── HEADER ── */
         .lb-header {
-          background: linear-gradient(180deg, #000 0%, #030f05 100%);
+          background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(3,15,5,0.92) 100%);
           border-bottom: 1px solid rgba(57, 255, 20, 0.2);
           position: sticky;
           top: 0;
           z-index: 100;
           box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(6px);
         }
 
         .lb-header__inner {
@@ -164,10 +188,15 @@ html
         main { flex: 1; }
 
         /* ── FOOTER ── */
-        .lb-footer {
-          background: linear-gradient(0deg, #000 0%, #020c04 100%);
+        .lb-footer {background: linear-gradient(0deg, rgba(0,0,0,0.97) 0%, rgba(2,12,4,0.93) 20%);
           border-top: 1px solid rgba(57, 255, 20, 0.15);
           margin-top: auto;
+          backdrop-filter: blur(6px);
+        }
+
+        main {
+         flex: 1;
+         min-height: 69vh;
         }
 
         .lb-footer__top {
@@ -269,6 +298,10 @@ html
         }
 
   body
+    video.lb-bg-video autoplay="true" loop="true" muted="true" playsinline="true"
+      source src="/background.webm" type="video/webm"
+    .lb-bg-overlay
+
     header.lb-header
       .lb-header__inner
         a.lb-logo href="/"
@@ -277,7 +310,7 @@ html
 
         - if session[:user_id]
           nav.lb-nav
-		    a href="/upgrade" Upgrade 
+            a href="/upgrade" Upgrade
             a href="/play" Play
             a href="/shop" Shop
             a href="/orders" Orders
@@ -309,6 +342,7 @@ html
           h4 My Account
           ul
             - if session[:user_id]
+              li: a href="/upgrade" Upgrade
               li: a href="/play" Play
               li: a href="/shop" Shop
               li: a href="/orders" Orders
