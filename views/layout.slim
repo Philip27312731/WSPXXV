@@ -15,7 +15,6 @@ html
           --green-bright: #39ff14;
           --green-mid: #22c55e;
           --green-dark: #0f4a1e;
-          --green-deeper: #071a0c;
           --black: #030d05;
           --text-muted: #7dab89;
           --font-display: 'Bebas Neue', sans-serif;
@@ -31,6 +30,114 @@ html
           flex-direction: column;
         }
 
+        /* ── SPLASH ── */
+        #splash-overlay {
+          position: fixed;
+          inset: 0;
+          background: #000;
+          z-index: 9999;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          animation: splash-exit 0.7s ease-in-out 2.4s forwards;
+          pointer-events: none;
+        }
+
+        @keyframes splash-exit {
+          0%   { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(1.05); visibility: hidden; }
+        }
+
+        .splash-logo {
+          font-family: var(--font-display);
+          font-size: 5.5rem;
+          letter-spacing: 0.06em;
+          line-height: 1;
+          animation: splash-logo-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+        }
+
+        @keyframes splash-logo-in {
+          0%   { opacity: 0; transform: scale(0.5) translateY(30px); filter: blur(10px); }
+          100% { opacity: 1; transform: scale(1) translateY(0);      filter: blur(0); }
+        }
+
+        .splash-lucky { color: #fff; text-shadow: 0 0 30px rgba(57,255,20,0.3); }
+        .splash-bet   { color: var(--green-bright); text-shadow: 0 0 30px var(--green-bright), 0 0 70px rgba(57,255,20,0.4); }
+
+        .splash-chips {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .chip {
+          position: absolute;
+          top: -60px;
+          border-radius: 50%;
+          border: 4px solid var(--green-bright);
+          box-shadow: 0 0 12px rgba(57,255,20,0.5);
+          background: radial-gradient(circle at 35% 35%, #1a6e2e, #0a2e10);
+          animation: chip-fall linear forwards;
+        }
+
+        .chip:nth-child(1) { left: 8%;  width: 30px; height: 30px; animation-duration: 1.4s; animation-delay: 0.1s; }
+        .chip:nth-child(2) { left: 22%; width: 52px; height: 52px; animation-duration: 1.7s; animation-delay: 0.3s; }
+        .chip:nth-child(3) { left: 45%; width: 44px; height: 44px; animation-duration: 1.5s; animation-delay: 0.0s; }
+        .chip:nth-child(4) { left: 68%; width: 36px; height: 36px; animation-duration: 1.6s; animation-delay: 0.2s; }
+        .chip:nth-child(5) { left: 86%; width: 28px; height: 28px; animation-duration: 1.3s; animation-delay: 0.4s; }
+        .chip:nth-child(6) { left: 35%; width: 22px; height: 22px; animation-duration: 1.9s; animation-delay: 0.15s; }
+        .chip:nth-child(7) { left: 58%; width: 48px; height: 48px; animation-duration: 1.45s; animation-delay: 0.35s; }
+        .chip:nth-child(8) { left: 8%;  width: 30px; height: 30px; animation-duration: 1.4s; animation-delay: 0.95s; }
+        .chip:nth-child(9) { left: 40%; width: 52px; height: 52px; animation-duration: 1.7s; animation-delay: 0.95s; }
+        .chip:nth-child(10) { left: 45%; width: 44px; height: 44px; animation-duration: 1.5s; animation-delay: 0.05s; }
+        .chip:nth-child(11) { left: 60%; width: 36px; height: 36px; animation-duration: 1.6s; animation-delay: 0.55s; }
+        .chip:nth-child(12) { left: 65%; width: 28px; height: 28px; animation-duration: 1.3s; animation-delay: 0.65s; }
+        .chip:nth-child(13) { left: 70%; width: 22px; height: 22px; animation-duration: 1.9s; animation-delay: 0.75s; }
+        .chip:nth-child(14) { left: 10%; width: 48px; height: 48px; animation-duration: 1.45s; animation-delay: 0.85s; }
+
+        @keyframes chip-fall {
+          0%   { top: -70px; opacity: 1; transform: rotate(0deg); }
+          80%  { opacity: 1; }
+          100% { top: 110vh;  opacity: 0; transform: rotate(800deg); }
+        }
+
+        .splash-bar {
+          width: 280px;
+          height: 3px;
+          background: rgba(57,255,20,0.12);
+          border-radius: 2px;
+          overflow: hidden;
+          animation: splash-logo-in 0.4s ease 0.5s both;
+        }
+
+        .splash-bar__fill {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #22c55e, var(--green-bright));
+          border-radius: 2px;
+          box-shadow: 0 0 12px var(--green-bright);
+          animation: bar-fill 2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+        }
+
+        @keyframes bar-fill {
+          0%   { width: 0%; }
+          100% { width: 100%; }
+        }
+
+        .splash-tagline {
+          font-family: var(--font-body);
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.3em;
+          color: rgba(57,255,20,0.5);
+          text-transform: uppercase;
+          animation: splash-logo-in 0.4s ease 0.7s both;
+        }
+
+        /* ── VIDEO BG ── */
         .lb-bg-video {
           position: fixed;
           inset: 0;
@@ -38,13 +145,13 @@ html
           height: 100%;
           object-fit: cover;
           z-index: 0;
-          opacity: 0.70;
+          opacity: 0.67;
         }
 
         .lb-bg-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(0, 0, 0, 0.05);
           z-index: 1;
           pointer-events: none;
         }
@@ -61,7 +168,7 @@ html
           position: sticky;
           top: 0;
           z-index: 100;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 4px 30px rgba(0,0,0,0.6);
           backdrop-filter: blur(6px);
         }
 
@@ -119,7 +226,7 @@ html
           text-decoration: none;
           padding: 0.45rem 1rem;
           border-radius: 4px;
-          transition: color 0.2s, background 0.2s;
+          transition: color 0.2s;
           position: relative;
         }
 
@@ -179,24 +286,23 @@ html
           box-shadow: 0 0 16px rgba(34,197,94,0.35);
         }
         .lb-btn--primary:hover {
-          background: linear-gradient(135deg, #39ff14, #22c55e);
+          background: linear-gradient(135deg, var(--green-bright), #22c55e);
           box-shadow: 0 0 22px rgba(57,255,20,0.5);
           color: #000;
         }
 
         /* ── MAIN ── */
-        main { flex: 1; }
+        main {
+          flex: 1;
+          min-height: 69vh;
+        }
 
         /* ── FOOTER ── */
-        .lb-footer {background: linear-gradient(0deg, rgba(0,0,0,0.97) 0%, rgba(2,12,4,0.93) 20%);
+        .lb-footer {
+          background: linear-gradient(0deg, rgba(0,0,0,0.97) 0%, rgba(2,12,4,0.93) 20%);
           border-top: 1px solid rgba(57, 255, 20, 0.15);
           margin-top: auto;
           backdrop-filter: blur(6px);
-        }
-
-        main {
-         flex: 1;
-         min-height: 69vh;
         }
 
         .lb-footer__top {
@@ -298,6 +404,29 @@ html
         }
 
   body
+    #splash-overlay
+      .splash-chips
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+        .chip
+      .splash-logo
+        span.splash-lucky Lucky
+        span.splash-bet Bet
+      .splash-tagline Your luck starts here
+      .splash-bar
+        .splash-bar__fill
+
     video.lb-bg-video autoplay="true" loop="true" muted="true" playsinline="true"
       source src="/background.webm" type="video/webm"
     .lb-bg-overlay

@@ -1,19 +1,18 @@
 .game-container
   .sidebar
     .player-info
-     center
+      center
         h1 LuckyBet
         - if error
           .alert.alert-danger= error
         - if message
           .alert.alert-success= message
         p.balance= "Balance: #{'%.2f' % balance}kr"
-        
-  
+
   .main-game
     .games-grid
       .game-card
-       center
+        center
           p.description Exciting game experience
           form method="post" action="/play"
             .form-group
@@ -21,7 +20,239 @@
               select name="bet"
                 - bet_options.each do |b|
                   option value=b.to_i selected=(b == bet_options.max) = b.to_i
-            p Odds: #{(win_odds * 100).to_i}%
-            button.btn.btn-play type="submit" Play 
-        
-      
+            p.odds Odds: #{(win_odds * 100).to_i}%
+
+            button.btn-play type="submit"
+              .btn-play__corner.tl
+              .btn-play__corner.tr
+              .btn-play__corner.bl
+              .btn-play__corner.br
+              .btn-play__scanline
+              .btn-play__content
+                svg.btn-play__icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                  path d="M8 5v14l11-7z"
+                span.btn-play__text PLAY NOW
+                span.btn-play__sub PRESS TO SPIN
+
+script
+  |
+    (function() {
+      var overlay = document.getElementById('splash-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    })();
+
+style
+  |
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+    .game-container {
+      display: flex;
+      min-height: 80vh;
+      padding: 2rem;
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .sidebar { width: 240px; flex-shrink: 0; }
+
+    .player-info {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .player-info h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.08em;
+      color: #39ff14;
+      text-shadow: 0 0 16px #39ff14;
+      margin-bottom: 1rem;
+    }
+
+    .balance {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      color: #39ff14;
+      text-shadow: 0 0 8px rgba(57,255,20,0.5);
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .alert {
+      font-size: 0.85rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 5px;
+      margin-bottom: 0.75rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+    }
+
+    .alert-danger  { background: rgba(220,38,38,0.15);  border: 1px solid rgba(220,38,38,0.4);  color: #fca5a5; }
+    .alert-success { background: rgba(57,255,20,0.1);   border: 1px solid rgba(57,255,20,0.35); color: #86efac; }
+
+    .main-game { flex: 1; display: flex; align-items: center; justify-content: center; }
+    .games-grid { width: 100%; }
+
+    .game-card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(57,255,20,0.18);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .description {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      color: #7dab89;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .form-group label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: rgba(57,255,20,0.7);
+      text-transform: uppercase;
+    }
+
+    .form-group select {
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(57,255,20,0.4);
+      border-radius: 5px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group select:focus {
+      border-color: #39ff14;
+      box-shadow: 0 0 10px rgba(57,255,20,0.3);
+    }
+
+    .odds {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(57,255,20,0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-play {
+      position: relative;
+      display: block;
+      margin: 2.5rem auto 0;
+      width: 300px;
+      height: 110px;
+      background: linear-gradient(135deg, #061a09 0%, #0f4a1e 50%, #061a09 100%);
+      border: 2px solid #39ff14;
+      border-radius: 6px;
+      cursor: pointer;
+      overflow: hidden;
+      animation: border-pulse 2.5s ease-in-out infinite;
+      transition: transform 0.15s ease;
+    }
+
+    .btn-play:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 0 50px rgba(57,255,20,0.8), 0 0 120px rgba(57,255,20,0.4);
+    }
+
+    .btn-play:active { transform: translateY(2px) scale(0.97); }
+
+    @keyframes border-pulse {
+      0%, 100% { box-shadow: 0 0 18px rgba(57,255,20,0.35), 0 0 50px rgba(57,255,20,0.12), inset 0 0 25px rgba(57,255,20,0.04); }
+      50%       { box-shadow: 0 0 32px rgba(57,255,20,0.6),  0 0 80px rgba(57,255,20,0.22), inset 0 0 40px rgba(57,255,20,0.08); }
+    }
+
+    .btn-play__corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-color: #39ff14;
+      border-style: solid;
+      z-index: 3;
+      filter: drop-shadow(0 0 4px #39ff14);
+    }
+    .btn-play__corner.tl { top: 6px;    left: 6px;   border-width: 2px 0 0 2px; }
+    .btn-play__corner.tr { top: 6px;    right: 6px;  border-width: 2px 2px 0 0; }
+    .btn-play__corner.bl { bottom: 6px; left: 6px;   border-width: 0 0 2px 2px; }
+    .btn-play__corner.br { bottom: 6px; right: 6px;  border-width: 0 2px 2px 0; }
+
+    .btn-play__scanline {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 55%;
+      background: linear-gradient(to bottom, transparent 0%, rgba(57,255,20,0.07) 50%, transparent 100%);
+      animation: scanline 2.5s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes scanline {
+      0%   { top: -55%; }
+      100% { top: 120%; }
+    }
+
+    .btn-play__content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 3px;
+    }
+
+    .btn-play__icon {
+      width: 20px;
+      height: 20px;
+      color: #39ff14;
+      filter: drop-shadow(0 0 6px #39ff14);
+    }
+
+    .btn-play__text {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.7rem;
+      letter-spacing: 0.22em;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(57,255,20,0.9), 0 0 30px rgba(57,255,20,0.5), 0 0 60px rgba(57,255,20,0.2);
+      line-height: 1;
+    }
+
+    .btn-play__sub {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.48rem;
+      letter-spacing: 0.4em;
+      color: rgba(57,255,20,0.65);
+      text-shadow: 0 0 8px rgba(57,255,20,0.4);
+    }
